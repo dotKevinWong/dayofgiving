@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RCHS Email Signature Setup</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+  
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #f5f5f5;
+    color: #1a1a1a;
+    line-height: 1.6;
+  }
+  
+  .page-header {
+    background: #4B2D7F;
+    color: white;
+    padding: 32px 0;
+    text-align: center;
+  }
+  
+  .page-header h1 {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+  
+  .page-header p {
+    font-size: 14px;
+    opacity: 0.85;
+    margin-top: 6px;
+  }
+  
+  .container {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 32px 20px;
+  }
+  
+  .card {
+    background: white;
+    border-radius: 12px;
+    padding: 32px;
+    margin-bottom: 24px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+  
+  .card h2 {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #4B2D7F;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .card h2 .step-num {
+    background: #4B2D7F;
+    color: white;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+  
+  .section-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: #4B2D7F;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin: 24px 0 12px 0;
+    padding-top: 16px;
+    border-top: 1px solid #eee;
+  }
+  
+  .instructions ol {
+    padding-left: 0;
+    list-style: none;
+    counter-reset: steps;
+  }
+  
+  .instructions ol li {
+    counter-increment: steps;
+    padding: 10px 0 10px 36px;
+    position: relative;
+    font-size: 14px;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  
+  .instructions ol li:last-child { border-bottom: none; }
+  
+  .instructions ol li::before {
+    content: counter(steps);
+    position: absolute;
+    left: 0;
+    top: 10px;
+    background: #F0A830;
+    color: #4B2D7F;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .instructions code {
+    background: #f5f0ff;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 13px;
+    color: #4B2D7F;
+  }
+  
+  .sig-preview {
+    border: 2px dashed #ddd;
+    border-radius: 8px;
+    padding: 24px;
+    background: white;
+    margin: 16px 0;
+    position: relative;
+  }
+  
+  .sig-preview::before {
+    content: 'SELECT & COPY EVERYTHING BELOW THIS LINE';
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    color: #999;
+    letter-spacing: 1px;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px dashed #ddd;
+  }
+  
+  .copy-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #4B2D7F;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-top: 12px;
+  }
+  
+  .copy-btn:hover { background: #3a2066; }
+  .copy-btn.copied { background: #2d8a4e; }
+  
+  .note {
+    background: #fffbeb;
+    border-left: 3px solid #F0A830;
+    padding: 12px 16px;
+    border-radius: 0 8px 8px 0;
+    font-size: 13px;
+    margin: 16px 0;
+    color: #7a6520;
+  }
+  
+  .field-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+  }
+  
+  .field-input {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    margin-bottom: 16px;
+    transition: border 0.2s;
+  }
+  
+  .field-input:focus {
+    outline: none;
+    border-color: #4B2D7F;
+  }
+  
+  .field-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .link-item {
+    display: grid;
+    grid-template-columns: 1fr 1fr 36px;
+    gap: 10px;
+    align-items: start;
+    margin-bottom: 10px;
+  }
+
+  .link-item .field-input {
+    margin-bottom: 0;
+  }
+
+  .remove-link-btn {
+    width: 36px;
+    height: 42px;
+    border: 1px solid #e0e0e0;
+    background: #fafafa;
+    border-radius: 8px;
+    cursor: pointer;
+    color: #999;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+  }
+
+  .remove-link-btn:hover {
+    background: #fee;
+    border-color: #e88;
+    color: #c44;
+  }
+
+  .add-link-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: none;
+    border: 1px dashed #4B2D7F;
+    color: #4B2D7F;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: inherit;
+  }
+
+  .add-link-btn:hover {
+    background: #f5f0ff;
+  }
+
+  .link-header {
+    display: grid;
+    grid-template-columns: 1fr 1fr 36px;
+    gap: 10px;
+    margin-bottom: 6px;
+  }
+
+  .link-header span {
+    font-size: 11px;
+    font-weight: 600;
+    color: #999;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>RCHS Email Signature Generator</h1>
+  <p>The Roman Catholic High School of Philadelphia</p>
+</div>
+
+<div class="container">
+
+  <div class="card">
+    <h2><span class="step-num">1</span> Customize Your Signature</h2>
+    <p style="font-size: 14px; color: #666; margin-bottom: 20px;">Fill in your information below. The preview updates automatically.</p>
+    
+    <div class="section-label" style="border:none;margin-top:0;padding-top:0;">Your Info</div>
+    
+    <div class="field-row">
+      <div>
+        <div class="field-label">Full Name</div>
+        <input class="field-input" type="text" id="fieldName" value="John Smith" oninput="updatePreview()" />
+      </div>
+      <div>
+        <div class="field-label">Class Year (leave blank if N/A)</div>
+        <input class="field-input" type="text" id="fieldYear" value="'26" oninput="updatePreview()" />
+      </div>
+    </div>
+    
+    <div class="field-label">Title</div>
+    <input class="field-input" type="text" id="fieldTitle" value="Job Title" oninput="updatePreview()" />
+
+    <div class="field-row">
+      <div>
+        <div class="field-label">Phone</div>
+        <input class="field-input" type="text" id="fieldPhone" value="215-627-5487 ext. 203" oninput="updatePreview()" />
+      </div>
+      <div>
+        <div class="field-label">Email (optional)</div>
+        <input class="field-input" type="text" id="fieldEmail" value="" oninput="updatePreview()" placeholder="your.email@romancatholichs.com" />
+      </div>
+    </div>
+
+    <div class="section-label">Organization</div>
+
+    <div class="field-label">Organization Name</div>
+    <input class="field-input" type="text" id="fieldOrg" value="The Roman Catholic High School of Philadelphia" oninput="updatePreview()" />
+
+    <div class="field-label">Address</div>
+    <input class="field-input" type="text" id="fieldAddress" value="301 N. Broad St., Philadelphia, PA 19107" oninput="updatePreview()" />
+
+    <div class="section-label">Links</div>
+
+    <div class="link-header">
+      <span>Label</span>
+      <span>URL</span>
+      <span></span>
+    </div>
+    <div id="linksContainer"></div>
+    <button class="add-link-btn" onclick="addLink()">+ Add Link</button>
+
+  </div>
+
+  <div class="card">
+    <h2><span class="step-num">2</span> Preview & Copy Your Signature</h2>
+    
+    <div class="sig-preview" id="sigPreview"></div>
+    
+    <button class="copy-btn" id="copyBtn" onclick="copySignature()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+      Copy Signature
+    </button>
+    
+    <div class="note" style="margin-top: 16px;">
+      <strong>Tip:</strong> If the copy button doesn't work, click inside the dashed box, press <code>Ctrl+A</code> (<code>Cmd+A</code> on Mac) to select all, then <code>Ctrl+C</code> / <code>Cmd+C</code> to copy.
+    </div>
+  </div>
+
+  <div class="card instructions">
+    <h2><span class="step-num">3</span> Add to Google Workspace (Gmail)</h2>
+    <ol>
+      <li>Open <strong>Gmail</strong> in your browser (mail.google.com)</li>
+      <li>Click the <strong>gear icon</strong> in the top right, then click <strong>"See all settings"</strong></li>
+      <li>Scroll down to the <strong>"Signature"</strong> section on the General tab</li>
+      <li>Click <strong>"+ Create new"</strong> and give it a name (e.g., "RCHS Signature")</li>
+      <li><strong>Delete</strong> any existing content in the signature box</li>
+      <li><strong>Paste</strong> your copied signature (<code>Ctrl+V</code> / <code>Cmd+V</code>)</li>
+      <li>Under <strong>"Signature defaults"</strong>, select your new signature for new emails and replies</li>
+      <li>Scroll to the bottom and click <strong>"Save Changes"</strong></li>
+    </ol>
+    <div class="note">
+      <strong>About the logo:</strong> If the RCHS seal doesn't appear after pasting, click the <strong>image icon</strong> in the signature editor toolbar and upload the seal image. Ask your IT admin for the official high-res file.
+    </div>
+  </div>
+
+  <div class="card instructions">
+    <h2><span class="step-num">&#10038;</span> Alternative: Outlook / Other Email</h2>
+    <ol>
+      <li><strong>Outlook Desktop:</strong> File &rarr; Options &rarr; Mail &rarr; Signatures &rarr; New &rarr; Paste</li>
+      <li><strong>Outlook Web:</strong> Settings &rarr; View all Outlook settings &rarr; Mail &rarr; Compose and reply &rarr; Paste</li>
+      <li><strong>Apple Mail:</strong> Mail &rarr; Settings &rarr; Signatures &rarr; Click + &rarr; Paste</li>
+    </ol>
+  </div>
+  
+</div>
+
+<script>
+const SEAL_B64 = "https://raw.githubusercontent.com/dotKevinWong/dayofgiving/refs/heads/main/2026/assets/rchs_seal.png"
+const DOG_GIF_URL = "https://raw.githubusercontent.com/dotKevinWong/dayofgiving/refs/heads/main/2026/assets/dog_2026.gif";
+const DOG_LINK = "https://www.romancatholichs.com/DayOfGiving";
+
+let links = [
+  { label: 'Give Today', url: 'https://www.romancatholichs.com/giving' },
+  { label: 'Tour our Campus', url: 'https://tours.momentumvirtualtours.com/tours/myrYAonEb' }
+];
+
+function esc(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+function renderLinks() {
+  const container = document.getElementById('linksContainer');
+  container.innerHTML = '';
+  links.forEach((link, i) => {
+    const row = document.createElement('div');
+    row.className = 'link-item';
+
+    const labelInput = document.createElement('input');
+    labelInput.className = 'field-input';
+    labelInput.type = 'text';
+    labelInput.value = link.label;
+    labelInput.placeholder = 'Label';
+    labelInput.addEventListener('input', function() {
+      links[i].label = this.value;
+      updatePreview();
+    });
+
+    const urlInput = document.createElement('input');
+    urlInput.className = 'field-input';
+    urlInput.type = 'text';
+    urlInput.value = link.url;
+    urlInput.placeholder = 'https://...';
+    urlInput.addEventListener('input', function() {
+      links[i].url = this.value;
+      updatePreview();
+    });
+
+    const removeBtn = document.createElement('button');
+    removeBtn.className = 'remove-link-btn';
+    removeBtn.title = 'Remove';
+    removeBtn.innerHTML = '&times;';
+    removeBtn.addEventListener('click', function() {
+      removeLink(i);
+    });
+
+    row.appendChild(labelInput);
+    row.appendChild(urlInput);
+    row.appendChild(removeBtn);
+    container.appendChild(row);
+  });
+}
+
+function addLink() {
+  links.push({ label: '', url: '' });
+  renderLinks();
+  // Focus the new label input
+  const inputs = document.querySelectorAll('#linksContainer .link-item:last-child input');
+  if (inputs.length > 0) inputs[0].focus();
+  updatePreview();
+}
+
+function removeLink(i) {
+  links.splice(i, 1);
+  renderLinks();
+  updatePreview();
+}
+
+function updatePreview() {
+  const name = document.getElementById('fieldName').value || 'Your Name';
+  const year = document.getElementById('fieldYear').value;
+  const title = document.getElementById('fieldTitle').value;
+  const phone = document.getElementById('fieldPhone').value;
+  const email = document.getElementById('fieldEmail').value;
+  const org = document.getElementById('fieldOrg').value;
+  const address = document.getElementById('fieldAddress').value;
+  
+  const nameDisplay = esc(year ? name + ' ' + year : name);
+  
+  let emailLine = '';
+  if (email) {
+    emailLine = '<tr><td style="padding:0 0 2px 0;font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#333;"><a href="mailto:' + esc(email) + '" style="color:#4B2D7F;text-decoration:none;">' + esc(email) + '</a></td></tr>';
+  }
+
+  const validLinks = links.filter(l => l.label && l.url);
+  let linksLine = '';
+  if (validLinks.length > 0) {
+    const linkHtml = validLinks.map(l =>
+      '<a href="' + esc(l.url) + '" style="color:#4B2D7F;text-decoration:none;font-weight:bold;">' + esc(l.label) + '</a>'
+    ).join('<span style="color:#999;margin:0 6px;">|</span>');
+    linksLine = '<tr><td style="padding:6px 0 0 0;font-family:Arial,Helvetica,sans-serif;font-size:12px;">' + linkHtml + '</td></tr>';
+  }
+
+  const sigHTML = `
+    <table cellpadding="0" cellspacing="0" border="0" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#333;line-height:1.4;">
+      <tr>
+        <td style="vertical-align:top;padding-right:14px;border-right:2px solid #4B2D7F;">
+          <img src="${SEAL_B64}" alt="RCHS Seal" width="80" height="80" style="display:block;border-radius:50%;" />
+        </td>
+        <td style="vertical-align:top;padding-left:14px;">
+          <table cellpadding="0" cellspacing="0" border="0">
+            <tr><td style="padding:0 0 2px 0;font-family:Arial,Helvetica,sans-serif;font-size:14px;font-weight:bold;color:#4B2D7F;">${nameDisplay}</td></tr>
+            <tr><td style="padding:0 0 2px 0;font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#333;">${esc(title)}</td></tr>
+            <tr><td style="padding:0 0 2px 0;font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#333;font-weight:bold;">${esc(org)}</td></tr>
+            <tr><td style="padding:0 0 2px 0;font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#333;">${esc(address)}</td></tr>
+            <tr><td style="padding:0 0 2px 0;font-family:Arial,Helvetica,sans-serif;font-size:13px;color:#333;">${esc(phone)}</td></tr>
+            ${emailLine}
+            ${linksLine}
+          </table>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2" style="padding-top:14px;">
+          <table cellpadding="0" cellspacing="0" border="0" style="font-family:Arial,Helvetica,sans-serif;">
+            <tr>
+              <td style="vertical-align:middle;padding-right:12px;">
+                <a href="${DOG_LINK}" style="text-decoration:none;">
+                  <img src="${DOG_GIF_URL}" alt="RCHS Day of Giving" width="100" height="77" style="display:block;" />
+                </a>
+              </td>
+              <td style="vertical-align:middle;">
+                <a href="${DOG_LINK}" style="text-decoration:none;color:#4B2D7F;font-weight:bold;font-size:13px;font-family:Arial,Helvetica,sans-serif;">10th Annual Day of Giving</a><br/>
+                <span style="font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#555;">May 12, 2026</span><br/>
+                <a href="${DOG_LINK}" style="font-family:Arial,Helvetica,sans-serif;font-size:11px;color:#4B2D7F;text-decoration:underline;">RomanCatholicHS.com/DayOfGiving</a>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  `;
+  
+  document.getElementById('sigPreview').innerHTML = '<div id="sigContent">' + sigHTML + '</div>';
+}
+
+function copySignature() {
+  const sigContent = document.getElementById('sigContent');
+  if (!sigContent) return;
+  
+  const range = document.createRange();
+  range.selectNodeContents(sigContent);
+  const selection = window.getSelection();
+  selection.removeAllRanges();
+  selection.addRange(range);
+  
+  try {
+    document.execCommand('copy');
+    const btn = document.getElementById('copyBtn');
+    btn.classList.add('copied');
+    btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg> Copied!';
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy Signature';
+    }, 2000);
+  } catch (e) {
+    alert('Copy failed. Please manually select the signature and press Ctrl+C / Cmd+C.');
+  }
+  
+  selection.removeAllRanges();
+}
+
+// Init
+renderLinks();
+updatePreview();
+</script>
+
+</body>
+</html>
