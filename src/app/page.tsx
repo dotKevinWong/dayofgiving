@@ -96,7 +96,7 @@ export default function Home() {
           <h2>
             <span className="step-num">1</span> Customize Your Signature
           </h2>
-          <p style={{ fontSize: "14px", color: "#666", marginBottom: "20px" }}>
+          <p style={{  fontSize: "14px", color: "#666", marginBottom: "20px" }}>
             Fill in your information below. The preview updates automatically.
           </p>
 
@@ -577,7 +577,7 @@ function SignaturePreview({
                         color: "#555",
                       }}
                     >
-                      May 12, 2026
+                      Tuesday • May 12, 2026
                     </span>
                     <br />
                     <a
